@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14 # You can specify a different version if needed
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres     # Define a username for the database
+      POSTGRES_PASSWORD: mypassword # Define a password for the database
+      POSTGRES_DB: mydatabase      # Name of the default database to create
+    ports:
+      - "5432:5432" # Expose PostgreSQL on port 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persist data in a Docker volume
+
+volumes:
+  postgres_data:
+    driver: local
+
