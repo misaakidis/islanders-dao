@@ -2,6 +2,13 @@
 
 Islanders is a liquid democracy platform for everyone who calls Cyprus home. We leverage social trust for establishing identity, blockchain for transparency and verifiability, and zero-knowledge cryptography for privacy.
 
+## Deployed contracts
+
+### Sepolia
+
+- IslandFactory: [0xf613cC447386Edca54a82bDB04386eb7031E703a](https://testnet.routescan.io/address/0xf613cC447386Edca54a82bDB04386eb7031E703a/contract/11155111/code)
+- FederationManager: [0xe7E7254D95cbbD5f00a4AAdc4bE27F56d9f99e2f](https://testnet.routescan.io/address/0xe7E7254D95cbbD5f00a4AAdc4bE27F56d9f99e2f/contract/11155111/code)
+
 ## Installation
 
 ### Requirements
