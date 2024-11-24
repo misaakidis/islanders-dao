@@ -1,15 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useLocalStorage } from "usehooks-ts";
 import { Option, POLLS_PATH, Poll } from "~~/app/polls/_common";
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = params.id;
+  const router = useRouter();
+
   const [pollData, updatePolls] = useLocalStorage<Poll[]>(POLLS_PATH, []);
-  const poll = pollData.find(p => p.id === parseInt(id));
   const [selectedOption, setSelectedOption] = useState<Option>();
 
+  const poll = pollData.find(p => p.id === parseInt(id));
   if (!poll) {
     return (
       <div className="min-h-screen bg-gray-100 p-6">
@@ -25,6 +28,8 @@ export default function Page({ params }: { params: { id: string } }) {
     if (selectedOption) {
       selectedOption.count++;
       updatePolls(pollData);
+      router.push(`/${POLLS_PATH}`);
+      alert("Your vote has been recorded!");
     } else {
       alert("Please select an option before voting.");
     }
