@@ -1,5 +1,7 @@
 # Islanders
 
+![Islanders Banner](Islanders_banner.png)
+
 Islanders is a liquid democracy platform for everyone who calls Cyprus home. We leverage social trust for establishing identity, blockchain for transparency and verifiability, and zero-knowledge cryptography for privacy.
 
 ## Deployed contracts
@@ -65,4 +67,4 @@ Islanders was conceived and developed during [HACKTECH|24](https://thehacktech.c
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENCE).
