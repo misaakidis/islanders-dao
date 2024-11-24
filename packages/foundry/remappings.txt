@@ -1,1 +1,4 @@
 @openzeppelin/contracts/=lib/openzeppelin-contracts/contracts
+@semaphore-protocol/=node_modules/@semaphore-protocol
+@zk-kit/=node_modules/@zk-kit
+poseidon-solidity/=node_modules/poseidon-solidity
