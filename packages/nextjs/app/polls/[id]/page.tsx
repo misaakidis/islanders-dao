@@ -1,30 +1,14 @@
-"use client"
+"use client";
 
-import {useState} from "react"
+import { useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
+import { Option, POLLS_PATH, Poll } from "~~/app/polls/_common";
 
-export default function Page({params}: { params: { id: string } }) {
-  const id = params.id
-
-
-  const pollData = [
-    {
-      id: 1,
-      title: "Favorite Programming Language?",
-      description: "Vote for your favorite language!",
-      options: ["JavaScript", "Python", "Go", "Rust"],
-    },
-    {
-      id: 2,
-      title: "Best Movie of 2024?",
-      description: "Choose the best film of the year.",
-      options: ["Movie A", "Movie B", "Movie C"],
-    },
-  ]
-
-
-  // const { id } = useParams(); // Get the poll ID from the route
-  const poll = pollData.find((p) => p.id === parseInt(id)) // Find the poll by ID
-  const [selectedOption, setSelectedOption] = useState("")
+export default function Page({ params }: { params: { id: string } }) {
+  const id = params.id;
+  const [pollData, updatePolls] = useLocalStorage<Poll[]>(POLLS_PATH, []);
+  const poll = pollData.find(p => p.id === parseInt(id));
+  const [selectedOption, setSelectedOption] = useState<Option>();
 
   if (!poll) {
     return (
@@ -34,17 +18,17 @@ export default function Page({params}: { params: { id: string } }) {
           <p className="text-gray-600">The poll you are looking for does not exist.</p>
         </div>
       </div>
-    )
+    );
   }
 
   const handleVote = () => {
-    if (selectedOption !== null) {
-      // onVote(poll.id, selectedOption);
-      alert("Your vote has been recorded!") // Replace with more advanced feedback later
+    if (selectedOption) {
+      selectedOption.count++;
+      updatePolls(pollData);
     } else {
-      alert("Please select an option before voting.")
+      alert("Please select an option before voting.");
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -58,12 +42,12 @@ export default function Page({params}: { params: { id: string } }) {
                 type="radio"
                 id={`option-${index}`}
                 name="poll-option"
-                value={option}
+                value={option.value}
                 onChange={() => setSelectedOption(option)}
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500"
               />
               <label htmlFor={`option-${index}`} className="ml-2 text-gray-700">
-                {option}
+                {option.label} [{option.count}]
               </label>
             </div>
           ))}
@@ -76,5 +60,5 @@ export default function Page({params}: { params: { id: string } }) {
         </button>
       </div>
     </div>
-  )
+  );
 }

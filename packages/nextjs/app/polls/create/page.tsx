@@ -1,99 +1,101 @@
-"use client"
+"use client";
 
-import type {NextPage} from "next"
-import {useState} from "react"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import type { NextPage } from "next";
+import { useLocalStorage } from "usehooks-ts";
+import { Option, POLLS_PATH, Poll } from "~~/app/polls/_common";
 
 const CreatePoll: NextPage = () => {
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [options, setOptions] = useState([""])
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [options, setOptions] = useState([""]);
+  const router = useRouter();
+
+  const [polls, updatePolls] = useLocalStorage<Poll[]>(POLLS_PATH, []);
 
   const handleAddOption = () => {
-    setOptions([...options, ""])
-  }
+    setOptions([...options, ""]);
+  };
 
   const handleOptionChange = (index: number, value: string) => {
-    const newOptions = [...options]
-    newOptions[index] = value
-    setOptions(newOptions)
-  }
+    const newOptions = [...options];
+    newOptions[index] = value;
+    setOptions(newOptions);
+  };
 
   const handleRemoveOption = (index: number) => {
-    const newOptions = options.filter((_, i) => i !== index)
-    setOptions(newOptions)
-  }
+    const newOptions = options.filter((_, i) => i !== index);
+    setOptions(newOptions);
+  };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
-    e.preventDefault()
-    if (!title.trim() || options.some((opt) => !opt.trim())) {
-      alert("Please fill in all fields and options.")
-      return
+    e.preventDefault();
+    if (!title.trim() || options.some(opt => !opt.trim())) {
+      alert("Please fill in all fields and options.");
+      return;
     }
-    // onSubmit({ title, description, options });
-    setTitle("")
-    setDescription("")
-    setOptions([""])
-    alert("Poll created successfully!")
-  }
 
-  return (<div className="min-h-screen bg-gray-100 p-6">
+    const opts: Option[] = options.map(o => ({ value: o, label: o, count: 0 }));
+    const newPoll: Poll = { id: Date.now(), title, description, options: opts };
+    updatePolls([...polls, newPoll]);
+    router.push("/" + POLLS_PATH);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-4">Create New Poll</h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label
-              htmlFor="title"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700">
               Poll Title
             </label>
             <input
               type="text"
               id="title"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={e => setTitle(e.target.value)}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               required
             />
           </div>
           <div>
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
               Description (optional)
             </label>
             <textarea
               id="description"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={e => setDescription(e.target.value)}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
               rows={3}
             />
           </div>
           <div>
-            <label
-              htmlFor="options"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="options" className="block text-sm font-medium text-gray-700">
               Options
             </label>
-            {options.map((option, index) => (<div key={index} className="flex items-center space-x-4 mt-2">
+            {options.map((option, index) => (
+              <div key={index} className="flex items-center space-x-4 mt-2">
                 <input
                   type="text"
                   value={option}
-                  onChange={(e) => handleOptionChange(index, e.target.value)}
+                  onChange={e => handleOptionChange(index, e.target.value)}
                   className="flex-grow rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                   required
                 />
-                {options.length > 1 && (<button
+                {options.length > 1 && (
+                  <button
                     type="button"
                     onClick={() => handleRemoveOption(index)}
                     className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded"
                   >
                     Remove
-                  </button>)}
-              </div>))}
+                  </button>
+                )}
+              </div>
+            ))}
             <button
               type="button"
               onClick={handleAddOption}
@@ -110,7 +112,8 @@ const CreatePoll: NextPage = () => {
           </button>
         </form>
       </div>
-    </div>)
-}
+    </div>
+  );
+};
 
-export default CreatePoll
+export default CreatePoll;
